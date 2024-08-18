@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Query
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
 
 from typing import List, Optional
 import psycopg2
@@ -32,6 +33,13 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ItemJSON(BaseModel):
     name: str
